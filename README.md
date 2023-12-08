@@ -1,41 +1,89 @@
-# Reproducible research: version control and R
+\# INSERT ANSWERS HERE \#
 
-\# INSERT ANSWERS HERE #
+Q1-
 
-## Instructions
+This code models the growth of a culture of E.Coli It does this by estimating the rate of growth, starting population size and carrying capacity of the E.Coli
 
-The homework for this Computer skills practical is divided into 5 questions for a total of 100 points (plus an optional bonus question worth 10 extra points). First, fork this repo and make sure your fork is made **Public** for marking. Answers should be added to the # INSERT ANSWERS HERE # section above in the **README.md** file of your forked repository.
+**First we used plot_data.R to create a graph of log(N) against t**
 
-Questions 1, 2 and 3 should be answered in the **README.md** file of the `logistic_growth` repo that you forked during the practical. To answer those questions here, simply include a link to your logistic_growth repo.
+First I plotted the logistic growth data In plot_data.R we called the data from **experiment 1.csv** as growth_data)
 
-**Submission**: Please submit a single **PDF** file with your candidate number (and no other identifying information), and a link to your fork of the `reproducible-research_homework` repo with the completed answers. All answers should be on the `main` branch.
+I used the package ggplot2 to plot the time (t) against bacteria population (N) on a graph
 
-## Assignment questions 
+After this I transformed the data so that we plotted time passed against the log function of number of bacteria. This was done to determine if we could observe a linear relationship between time passed and the log function of the number of species.
 
-1) (**10 points**) Annotate the **README.md** file in your `logistic_growth` repo with more detailed information about the analysis. Add a section on the results and include the estimates for $N_0$, $r$ and $K$ (mention which *.csv file you used).
-   
-2) (**10 points**) Use your estimates of $N_0$ and $r$ to calculate the population size at $t$ = 4980 min, assuming that the population grows exponentially. How does it compare to the population size predicted under logistic growth? 
+**Then we used fit_linear_model.R to determine our N0, r and k values given different conditions for t**
 
-3) (**20 points**) Add an R script to your repository that makes a graph comparing the exponential and logistic growth curves (using the same parameter estimates you found). Upload this graph to your repo and include it in the **README.md** file so it can be viewed in the repo homepage.
-   
-4) (**30 points**) Sometimes we are interested in modelling a process that involves randomness. A good example is Brownian motion. We will explore how to simulate a random process in a way that it is reproducible:
+Under the first conditions N is very small compared to K
 
-   - A script for simulating a random_walk is provided in the `question-4-code` folder of this repo. Execute the code to produce the paths of two random walks. What do you observe? (10 points)
-   - Investigate the term **random seeds**. What is a random seed and how does it work? (5 points)
-   - Edit the script to make a reproducible simulation of Brownian motion. Commit the file and push it to your forked `reproducible-research_homework` repo. (10 points)
-   - Go to your commit history and click on the latest commit. Show the edit you made to the code in the comparison view (add this image to the **README.md** of the fork). (5 points)
+I used the linear model function (lm()) to determine the y intercept and gradient of a graph with certain conditions for t n and k. First I used a model where N \<\< K and where t is small. In this model we used t \< 300 and plotted t against log(N(t))
 
-5) (**30 points**) In 2014, Cui, Schlub and Holmes published an article in the *Journal of Virology* (doi: https://doi.org/10.1128/jvi.00362-14) showing that the size of viral particles, more specifically their volume, could be predicted from their genome size (length). They found that this relationship can be modelled using an allometric equation of the form **$`V = \beta L^{\alpha}`$**, where $`V`$ is the virion volume in nm<sup>3</sup> and $`L`$ is the genome length in nucleotides.
+This gave us values for r and N0 which were as follows:
 
-   - Import the data for double-stranded DNA (dsDNA) viruses taken from the Supplementary Materials of the original paper into Posit Cloud (the csv file is in the `question-5-data` folder). How many rows and columns does the table have? (3 points)
-   - What transformation can you use to fit a linear model to the data? Apply the transformation. (3 points)
-   - Find the exponent ($\alpha$) and scaling factor ($\beta$) of the allometric law for dsDNA viruses and write the p-values from the model you obtained, are they statistically significant? Compare the values you found to those shown in **Table 2** of the paper, did you find the same values? (10 points)
-   - Write the code to reproduce the figure shown below. (10 points)
+**RESULTS**
 
-  <p align="center">
-     <img src="https://github.com/josegabrielnb/reproducible-research_homework/blob/main/question-5-data/allometric_scaling.png" width="600" height="500">
-  </p>
+r = 0.013516 - which is our gradient
 
-  - What is the estimated volume of a 300 kb dsDNA virus? (4 points)
+N0 = 6.8421256e - which is our y intercept
 
-**Bonus** (**10 points**) Explain the difference between reproducibility and replicability in scientific research. How can git and GitHub be used to enhance the reproducibility and replicability of your work? what limitations do they have? (e.g. check the platform [protocols.io](https://www.protocols.io/)).
+To determine the carrying capacity we looked at a scenario where t was large so that N(t) = k
+
+We inputted t \>(3000) into our model and got this values
+
+K = 6e\^10
+
+**Then we used plot_data_and_model to input these values of N0,r and k into a linear model, confirming that they were the correct values**
+
+when we did this - we observed the same graph as given by our data plot, confirming these values for N0,r and k.
+
+Q2 -
+
+The exponential graph gave a value of 2.289804exp(25) at t = 4980 -this is far larger than the size predicted at this time for logistic growth
+
+Q3 -
+
+![](Plot_comparision.png){width="260"}
+
+Q4 -
+
+I observe that the code creates data frames that form plot lines color coded by t values. This plot lines follow on from each other, have a random starting point and move in random directions. Running the code more than once does not change the output of the random paths of the plot.
+
+seed is a vector that sets an RNG containing integers. Random seed can take different values through set.seed(). Once the seed is set - the code will return the same output unless the code is restarted.
+
+I was unable to get a comparision between the original and modified rscript as I worked in rstudio and imported my code.
+
+![](Random.png){width="370" height="200"}
+
+Q5 -
+
+There are 34 rows and 13 columns
+
+I can import the janitor package and clean the data so that there are no spaces. This will allow me to the data, calling the column names.
+
+To determine the values for a and b - i transformed the data set into log(length) against log(volume).
+
+Coefficients:
+
+(Intercept) 7.0748
+
+log_length 1.5152
+
+so if we know that log(B) = c, a = m
+
+our c is log length and our gradient is m which is 1.5152. c = exp(7.0748) = log(B).
+
+So b = exp(7.0748) = 1181.807.
+
+This lines up with table2 from the study on viruses as these figures round to those listed in the experiment.
+
+Below is the recreation of the graph plotting the log of genome length against the log of the virion volume.
+
+![](virus_log_plot.png){width="343"}
+
+I estimated the volume of a virion with length 300 Kb using a function with the equation -
+
+v = b\*L\^a
+
+this gave the value 6697006 nm3
+
+Reproducibility refers to how simlar results are when other researchers can conduct the same analysis on a data frame as well as how easy it is to conduct the analysis. Replicability involves measures the additional component of how easy it is for researchers to collect and a new data set and run the analysis for a complete repeat of the experiment. Github allows the retention of previously made code so that other researchers may reproduce data. It also provides researchers the ability to run code made by others . This is limited as it is difficult for github to improve repeatibility of experiments as collection of a new data set cannot be assisted through github.
